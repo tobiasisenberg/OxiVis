@@ -1,4 +1,4 @@
-# Oximeter Trace Capture and Visualization
+# Oximeter Data Capture and Visualization
 
 This project uses a bluetooth-enabled pulse oximeter, an ESP32 microcontroller board, and a Linux server to capture a longer trace of the heart rate (in beats per minute, BPM), oxygen saturation level (SpO2) in percent, and photoplethysmograph (PPG) values and to visualize them. The intention is to capture a whole night's worth of data, and produce a PDF with the graphs of the values over time.
 
