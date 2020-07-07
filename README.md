@@ -29,7 +29,7 @@ Several elements need to be in place for the project to work:
 
 ### Installing
 
-1. Customize the `ESP32-BLE-Oximeter.ino` file to your oximeter; you need to adjust the following lines with the UUIDs and the address of your device (for an explanation on how to get these values see [the video](https://youtu.be/FIVIPHrAuAI) by @SensorsIot that inspired this project):
+1. Customize the `ESP32-BLE-Oximeter.ino` file to your oximeter; you need to adjust the following lines with the UUIDs and the address of your device (for an explanation on how to get these values see [the video](https://youtu.be/FIVIPHrAuAI) by [@SensorsIot](https://github.com/SensorsIot) that inspired this project):
 ```
 // The remote service we wish to connect to.
 static BLEUUID serviceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455");
@@ -190,4 +190,4 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Acknowledgments
 
-The ESP sketch is based on the ESP32 BLE library by @nkolban for which I cannot find the source in [the mentioned repository](https://github.com/nkolban/esp32-snippets) (but which is included with the ESP32 Add-on for the Arduino IDE). The basic sketch apparently was also extended by user @chegewara. The project was inspired by [a video](https://youtu.be/FIVIPHrAuAI) by @SensorsIot. I also contributed some initial code to make the BLE-reading of the BerryMed BM1000C working to @SensorsIot's [repository](https://github.com/SensorsIot/Oximeters-BLE-Hack-ESP32), and this fix is also used in this project.
+The ESP sketch is based on the ESP32 BLE library by [@nkolban](https://github.com/nkolban/) for which I cannot find the source in [the mentioned repository](https://github.com/nkolban/esp32-snippets) (but which is included with the ESP32 Add-on for the Arduino IDE). The basic sketch apparently was also extended by user [@chegewara](https://github.com/chegewara). The project was inspired by [a video](https://youtu.be/FIVIPHrAuAI) by [@SensorsIot](https://github.com/SensorsIot). I also contributed some initial code to make the BLE-reading of the BerryMed BM1000C working to @SensorsIot's [repository](https://github.com/SensorsIot/Oximeters-BLE-Hack-ESP32), and this fix is also used in this project.
