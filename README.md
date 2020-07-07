@@ -168,7 +168,7 @@ PdfReadWarning: Multiple definitions in dictionary at byte 0x5a0 for key /Type [
 PdfReadWarning: Multiple definitions in dictionary at byte 0x60e for key /Type [generic.py:588]
 PdfReadWarning: Multiple definitions in dictionary at byte 0x41a for key /Type [generic.py:588]
 ```
-and so on. The `example-data` directory contains an example trace, a batch file used to process it, and the resulting PDF report.
+and so on. The `example-data` directory contains an [example data file](example-data/oximeter-20200705-145239-83376.csv), a batch file used to process it, and the [resulting PDF report](example-data/oximeter-20200705-145239-83376-test%20trace.pdf).
 
 ## Data capture files
 
