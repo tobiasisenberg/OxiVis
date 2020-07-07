@@ -1,22 +1,22 @@
-# Oximeter Trace Capture and Visualization
+# Oximeter Data Capture and Visualization
 
-This project uses a bluetooth-enabled pulse oximeter, an ESP32 microcontroller board, and a Linux server to capture a longer trace of the heart rate (in beats per minute, BPM), oxygen saturation level (SpO2) in percent, and photoplethysmograph (PPG) values and to visualize them. The intention is to capture a whole night's worth of data, and produce a PDF with the graphs of the values over time.
+This project uses a bluetooth-enabled [pulse oximeter](https://en.wikipedia.org/wiki/Pulse_oximetry#Indication), an ESP32 microcontroller board, and a (Linux) server to capture a longer trace of the heart rate (in beats per minute, BPM), [oxygen saturation level (SpO2)](https://en.wikipedia.org/wiki/Oxygen_saturation_(medicine)) in percent, and [photoplethysmograph (PPG)](https://en.wikipedia.org/wiki/Photoplethysmogram) values and to visualize them. The intention is to capture a whole night's worth of data, and produce a [PDF with the graphs of the values over time](example-data/oximeter-20200705-145239-83376-test%20trace.pdf).
 
-I developed the project for a BerryMed BM1000C, but with small adjustments it would probably also work for others. The server-based part was tested on Raspberry Pi 4, but there is no reason it should not run on others including earlier Raspberry Pis (as there is not a lot or processing happening on the server) or even on non-Linux machines (e.g., Windows).
+I developed the project for a BerryMed BM1000C (see below), but with small adjustments it would probably also work for others. The server-based part was tested on Raspberry Pi 4, but there is no reason it should not run on others including earlier Raspberry Pi models (there is not a lot or processing happening on the server) or even on non-Linux machines (e.g., Windows).
 
 The project consists of three parts:
-1. The ESP32 sketch: it connects to the oximeter via bluetooth, captures the measured values, and posts the values to an MQTT server.
+1. The ESP32 sketch: it connects to the oximeter via [bluetooth low energy (BLE)](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy), captures the measured values, and posts the values to an [MQTT](https://en.wikipedia.org/wiki/MQTT) server.
 2. A Python script which runs on the server (ideally installed as a service) that subscribes to the relevant MQTT topics and writes the data into a CSV file.
-3. A Python script that is called with one or more CSV files to visualize the data as graphs and to write the graphs to a PDF.
+3. A Python script that, once a data recording session is complete, is called with one or more CSV files to visualize the data as graphs and to write the graphs to a PDF.
 
 ## Getting Started
 
-This description assumes that you know how to compile and upload sketches to an ESP32 using the [Arduino IDE](https://www.arduino.cc/en/main/software), have some basic understanding of working with the Linux command line, and understand basics about [MQTT](https://en.wikipedia.org/wiki/MQTT).
+This description assumes that you know how to compile and upload sketches to an ESP32 using the [Arduino IDE](https://www.arduino.cc/en/main/software), have some basic understanding of working with the Linux command line, and understand basics about MQTT.
 
 ### Prerequisites
 
 Several elements need to be in place for the project to work:
-- a bluetooth-enabled [pulse oximeter](https://en.wikipedia.org/wiki/Pulse_oximetry); the ESP32 sketch in this project was tested with and is customized for a BerryMed BM1000C:
+- a bluetooth-low-energy-enabled [pulse oximeter](https://en.wikipedia.org/wiki/Pulse_oximetry); the ESP32 sketch in this project was tested with and is customized for a BerryMed BM1000C:
 ![BerryMed BM1000C](images/BM1000C.jpg)
 - an ESP32, for example in the form of a [development board](https://www.espressif.com/en/products/devkits):
 ![ESP32 development board](images/esp32devboard.jpg)
@@ -29,7 +29,7 @@ Several elements need to be in place for the project to work:
 
 ### Installing
 
-1. Customize the `ESP32-BLE-Oximeter.ino` file to your oximeter; you need to adjust the following lines with the UUIDs and the address of your device (for an explanation on how to get these values see [the video](https://youtu.be/FIVIPHrAuAI) by @SensorsIot that inspired this project):
+1. Customize the `ESP32-BLE-Oximeter.ino` file to your oximeter; you need to adjust the following lines with the UUIDs and the address of your device (for an explanation on how to get these values see [the video](https://youtu.be/FIVIPHrAuAI) by [@SensorsIot](https://github.com/SensorsIot) that inspired this project):
 ```
 // The remote service we wish to connect to.
 static BLEUUID serviceUUID("49535343-fe7d-4ae5-8fa9-9fafd205e455");
@@ -63,7 +63,7 @@ Note that this example does not use username and password for the MQTT communica
 const char* time_zone_string =  "CET-1CEST,M3.5.0/2,M10.5.0/3"; // Posix TZ string for Europe, including DST 
 ```
 
-4. Compile and upload the sketch to your ESP32, using the `ESP32 Dev Module` board and the `Minimal SPIFFS` partitioning scheme. Assuming that your Linux machine with the MQTT server is running, when the ESP32 starts up it should connect to your network and you should see messages arriving under the topics `sensors/oximeter/#`. You could check for these messages, for example, with [MQTT Explorer](http://mqtt-explorer.com/). When you turn your oximeter on, it should also automatically be recognized, connected to, and the ESP32 should start publishing its data to the topics.
+4. Compile and upload the sketch to your ESP32, using the `ESP32 Dev Module` board and the `Minimal SPIFFS` partitioning scheme. Assuming that your Linux machine with the MQTT server is running, when the ESP32 starts up it should connect to your network and you should see messages arriving under the topics `sensors/oximeter/#`. You could check for these messages, for example, with [MQTT Explorer](http://mqtt-explorer.com/). When you turn your oximeter on, it should also automatically be recognized, connected to, and the ESP32 should start publishing its data to the topics. You can also use a serial monitor to check that the ESP32 correctly connects to the network and connects to the oximeter.
 
 5. On the Linux server, ensure that the needed Python MQTT module is installed for the data recorder:
 ```
@@ -74,7 +74,7 @@ sudo pip3 install paho-mqtt
 - download or copy the file to a temporary location somewhere, such as to your home directory `~/`
 - move the file to `/usr/local/bin/` and make it executable
 ```
-sudo cd /usr/local/bin/
+cd /usr/local/bin/
 sudo mv ~/oximeter-data-recording.py .
 sudo chmod 755 /usr/local/bin/oximeter-data-recording.py
 ```
@@ -168,7 +168,7 @@ PdfReadWarning: Multiple definitions in dictionary at byte 0x5a0 for key /Type [
 PdfReadWarning: Multiple definitions in dictionary at byte 0x60e for key /Type [generic.py:588]
 PdfReadWarning: Multiple definitions in dictionary at byte 0x41a for key /Type [generic.py:588]
 ```
-and so on. The `example-data` directory contains an example trace, a batch file used to process it, and the resulting PDF report.
+and so on. The `example-data` directory contains an [example data file](example-data/oximeter-20200705-145239-83376.csv), a batch file used to process it, and the [resulting PDF report](example-data/oximeter-20200705-145239-83376-test%20trace.pdf).
 
 ## Data capture files
 
@@ -190,4 +190,4 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Acknowledgments
 
-The ESP sketch is based on the ESP32 BLE library by @nkolban for which I cannot find the source in [the mentioned repository](https://github.com/nkolban/esp32-snippets) (but which is included with the ESP32 Add-on for the Arduino IDE). The basic sketch apparently was also extended by user @chegewara. The project was inspired by [a video](https://youtu.be/FIVIPHrAuAI) by @SensorsIot. I also contributed some initial code to make the BLE-reading of the BerryMed BM1000C working to @SensorsIot's [repository](https://github.com/SensorsIot/Oximeters-BLE-Hack-ESP32), and this fix is also used in this project.
+The ESP sketch is based on the ESP32 BLE library by [@nkolban](https://github.com/nkolban/) for which I cannot find the source in [the mentioned repository](https://github.com/nkolban/esp32-snippets) (but which is included with the ESP32 Add-on for the Arduino IDE). The basic sketch apparently was also extended by user [@chegewara](https://github.com/chegewara). The project was inspired by [a video](https://youtu.be/FIVIPHrAuAI) by [@SensorsIot](https://github.com/SensorsIot). I also contributed some initial code to make the BLE-reading of the BerryMed BM1000C working to @SensorsIot's [repository](https://github.com/SensorsIot/Oximeters-BLE-Hack-ESP32), and this fix is also used in this project.
