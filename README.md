@@ -74,7 +74,7 @@ sudo pip3 install paho-mqtt
 - download or copy the file to a temporary location somewhere, such as to your home directory `~/`
 - move the file to `/usr/local/bin/` and make it executable
 ```
-sudo cd /usr/local/bin/
+cd /usr/local/bin/
 sudo mv ~/oximeter-data-recording.py .
 sudo chmod 755 /usr/local/bin/oximeter-data-recording.py
 ```
