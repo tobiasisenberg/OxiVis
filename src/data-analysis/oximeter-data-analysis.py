@@ -101,7 +101,6 @@ for additionalFileName in dataFileNames[1:]:
     needToRemoveInitial127BPM = True
     additionalOximeterData = []
     with open(additionalFileName, 'r', encoding='utf-8') as csvfile:
-        print("Parsing input file " + dataFileName)
         dataReader = csv.reader(csvfile, delimiter=',', quotechar='"')
         headers = next(dataReader)[0:]
         for row in dataReader:
