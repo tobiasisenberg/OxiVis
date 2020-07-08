@@ -141,12 +141,12 @@ sudo systemctl enable oximeter-data-recording.service
 sudo systemctl start oximeter-data-recording.service
 systemctl status oximeter-data-recording.service
 ```
-Now, as long as your ESP32 is running, as soon as you turn on the oximeter you should get the data recorded. This means you should see a CSV file being created in your data recording directory whose name starts with `oximeter-`, in the above example in `/var/log/openhab2/`. Also, the logfile (`/var/log/openhab2/oximeter-output.log` in the example) start to show messages about data being recorded.
+Now, as long as your ESP32 is running, as soon as you turn on the oximeter you should get the data recorded. This means you should see a CSV file being created in your data recording directory whose name starts with `oximeter-`, in the above example in `/var/log/openhab2/`. Also, the logfile (`/var/log/openhab2/oximeter-output.log` in the example) should start to show messages about data being recorded.
 
 It may happen that the BLE connection or the MQTT connection is interrupted during the data recording, but the ESP32 script should recover automatically, reconnect, and then start a new CSV data file (if the BLE disconnected) or continue the existing recording (if only the MQTT reconnected). In the next step we will combine the data from one or several of these data files from a single session into a joint visualization (explanation below).
 
 7. Data visualization: 
-On the system where you want to run the data analysis (can be different from the Linux server), [install Orca (I used the stand-alone binary)](https://github.com/plotly/orca). Then ensure that the respective Python modules are installed (use `sudo` on Linux or an Administrator command line on Windows):
+On the system where you want to run the data visualization (can be different from the Linux server), [install Orca (I used the stand-alone binary)](https://github.com/plotly/orca). Then ensure that the respective Python modules are installed (use `sudo` on Linux or an Administrator command line on Windows):
 ```
 pip3 install plotly==4.8.2
 pip3 install psutil requests
@@ -156,7 +156,7 @@ pip3 install matplotlib
 pip3 install PyPDF2
 ```
 
-8. Analyze your data.
+8. Visualize your data.
 ```
 oximeter-data-analysis.py "Name extension for the report" oximeter-20200705-143412-15586.csv
 ```
@@ -178,7 +178,7 @@ The CSV data capture files store the PPG, BPM, and SpO2 values and a millisecond
 
 As noted above, several data traces may be produced for a single recording sessions due to BLE or MQTT disconnects. This is unfortunate, but we address the issue by visualizing all data together, with some gaps where the traces were interrupted according to the respective time stamps. The ESP32 sketch uses several buffers to ensure that, at least during MQTT reconnects, data continues to be captured and that it is sent once the connection is back.
 
-Currently the ESP32 sketch uses four buffers in total, each containing 15 seconds worth of data (i.e., (3 bytes for PPG, SPO2, and BPM × 4 data sets per BLE notification + 4 bytes for a milliseconds timestamp) × 25 BLE notifications per second × 15 seconds = 6000 bytes per MQTT message). This means that, at the point when one buffer is full and ready to be sent and MQTT happens to be down right then (or the message sending fails which happens occasionally), there is still 3 × 15 seconds = 45 seconds time left for MQTT to reconnect and to send the data, before the first buffer would be overwritten. Nonetheless, both the 15 seconds and the four buffers in total are configurable in the `ESP32-BLE-Oximeter.ino` sketch. In a brief test with a 20 second buffer the MQTT sending failed immediately in my case, but 15 second buffers appear to run stably for me. Feel free to adjust the respective settings at the top of the `ESP32-BLE-Oximeter.ino` sketch to adjust things to your situation.
+Currently the ESP32 sketch uses four buffers in total, each containing 15 seconds worth of data (i.e., (3 bytes for PPG, SPO2, and BPM × 4 data sets per BLE notification + 4 bytes for a milliseconds timestamp) × 25 BLE notifications per second × 15 seconds = 6000 bytes per MQTT message). This means that, at the point when one buffer is full and ready to be sent and MQTT happens to be down right then (or the message sending fails, which also happens occasionally), there is still 3 × 15 seconds = 45 seconds time left for MQTT to reconnect and to send the data, before the first buffer would be overwritten. Nonetheless, both the 15 seconds and the four buffers in total are configurable in the `ESP32-BLE-Oximeter.ino` sketch. In a brief test with a 20 second buffer the MQTT sending failed immediately in my case, but 15 second buffers appear to run stably for me. Feel free to adjust the respective settings at the top of the `ESP32-BLE-Oximeter.ino` sketch to adjust things to your situation.
 
 ## Battery use for the oximeter
 
@@ -190,4 +190,4 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Acknowledgments
 
-The ESP sketch is based on the ESP32 BLE library by [@nkolban](https://github.com/nkolban/) for which I cannot find the source in [the mentioned repository](https://github.com/nkolban/esp32-snippets) (but which is included with the ESP32 Add-on for the Arduino IDE). The basic sketch apparently was also extended by user [@chegewara](https://github.com/chegewara). The project was inspired by [a video](https://youtu.be/FIVIPHrAuAI) by [@SensorsIot](https://github.com/SensorsIot). I also contributed some initial code to make the BLE-reading of the BerryMed BM1000C working to @SensorsIot's [repository](https://github.com/SensorsIot/Oximeters-BLE-Hack-ESP32), and this fix is also used in this project.
+The ESP sketch is based on the ESP32 BLE library by [@nkolban](https://github.com/nkolban/) for which I cannot find the source in [the mentioned repository](https://github.com/nkolban/esp32-snippets) (but which is included with the ESP32 Add-on for the Arduino IDE). The BLE example sketch that I used as a starting point apparently was also extended by user [@chegewara](https://github.com/chegewara). The project was inspired by [a video](https://youtu.be/FIVIPHrAuAI) by [@SensorsIot](https://github.com/SensorsIot). I also contributed some initial code to make the BLE-reading of the BerryMed BM1000C working to [@SensorsIot](https://github.com/SensorsIot)'s [repository](https://github.com/SensorsIot/Oximeters-BLE-Hack-ESP32), and this fix is also used in this project.
