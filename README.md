@@ -174,6 +174,12 @@ and so on. The `example-data` directory contains an [example data file](example-
 
 The CSV data capture files store the PPG, BPM, and SpO2 values and a milliseconds timestamp per line (as well as markers for the buffers that were sent over MQTT). Also, the automatically generated filenames of the CSV files indicate the time sync of when the oximeter connected to the ESP32 (both the real time and the millisecond runtime timestamp) so that we can relate the millisecond timestamps to a real data and time. Before processing the data files should thus not be renamed (sure, this could also have been recorded in the data file's first line, but oh well). Several lines have the same milliseconds timestamp because the data values are reported via BLE in bursts, so that several of them have the same (arrival) time. In the visualization later we assume that the data samples were taken at regular, evenly spaced intervals, and we only use the time stamp of the first and last data line in each file to place the data values correctly.
 
+## Limitations
+
+The data reported by the oximeter via bluethooth low energy (i.e., the PPG, BPM, and SpO2 values) comes in form of integer values (one byte each). This is more or less unproblematic for the PPG values since they use much of the value range of the byte (specifically, they go from 0 to 100). For the BPM values and, even more, for the SpO2 values, however, the integer precision leads to clearly visible discrete steps in the visualization:
+![Integer data](images/integer-data.png)
+The problem is worst for the SpO2 values because they usually only use a fairly small range of a few integer values. The BPM values vary more but still not as much as the PPG values. The first group of graphs in the visualization that use averaging thus are limited, in particular for the SpO2 values the discrete steps are still clearly visible. But there is nothing we can do about it due to the rounding (I assume) of these values that happens on the oximeter before they are being transmitted via BLE.
+
 ## Several data captures in one session
 
 As noted above, several data traces may be produced for a single recording sessions due to BLE or MQTT disconnects. This is unfortunate, but we address the issue by visualizing all data together, with some gaps where the traces were interrupted according to the respective time stamps. The ESP32 sketch uses several buffers to ensure that, at least during MQTT reconnects, data continues to be captured and that it is sent once the connection is back.
@@ -182,7 +188,7 @@ Currently the ESP32 sketch uses four buffers in total, each containing 15 second
 
 ## Battery use for the oximeter
 
-From my experiments it works to use regular AAA 1.2V NiMH batteries, they seem to last for a night's worth of data capture.
+judging from my experiments, the oximeter works fine with regular AAA 1.2V NiMH rechargeable batteries, they seem to last for a night's worth of data capture (8 hours, and probably a few hours more). Therefore, it does not seem to be necessary to use Alkaline batteries.
 
 ## License
 
