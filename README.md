@@ -24,7 +24,7 @@ Several elements need to be in place for the project to work:
 - a Linux-based server to manage the data recording, for example a Raspberry Pi running [Raspberry Pi OS/Raspbian](https://www.raspberrypi.org/downloads/raspberry-pi-os/)
 - an MQTT server such as [Mosquitto](https://mosquitto.org/) installed on the server (could also be on a different server accessible from the local network); for instance, follow [this tutorial](https://appcodelabs.com/introduction-to-iot-build-an-mqtt-server-using-raspberry-pi)
 - a recent Python 3.x installed on the Linux server, along with `pip3` to install further prerequisites
-- if the data analysis is not run on the Linux server, also a Python 3.x along with `pip3` installed on the machine to be used for the data analysis (e.g., [for Windows](https://www.python.org/downloads/windows/))
+- if the data visualization is not run on the Linux server, also a Python 3.x along with `pip3` installed on the machine to be used for the data visualization (e.g., [for Windows](https://www.python.org/downloads/windows/))
 - technically the data recording also could happen on a Windows server, but then the installation process below needs to be adjusted accordingly
 
 ### Installing
@@ -158,9 +158,9 @@ pip3 install PyPDF2
 
 8. Visualize your data.
 ```
-oximeter-data-analysis.py "Name extension for the report" oximeter-20200705-143412-15586.csv
+oximeter-data-visualization.py "Name extension for the report" oximeter-20200705-143412-15586.csv
 ```
-You can add several additional CSV files from a single recording session (by adding them, separated by a space each, to the call), but these need to be given in the correct sequence and need to use the same millisecond time stamp basis (i.e., need to come from a single session of the ESP32 running continuously, without a reboot). Also note that the data plotting may take a long time, up to an hour or more for several hours worth of data. The reason is that the PDF export from Plotly takes a long time, this is a [known issue](https://community.plotly.com/t/offline-plotting-in-python-is-very-slow-on-big-data-sets/3077). Also ignore the error messages posted at the end of the data analysis such as
+You can add several additional CSV files from a single recording session (by adding them, separated by a space each, to the call), but these need to be given in the correct sequence and need to use the same millisecond time stamp basis (i.e., need to come from a single session of the ESP32 running continuously, without a reboot). Also note that the data plotting may take a long time, up to an hour or more for several hours worth of data. The reason is that the PDF export from Plotly takes a long time, this is a [known issue](https://community.plotly.com/t/offline-plotting-in-python-is-very-slow-on-big-data-sets/3077). Also ignore the error messages posted at the end of the data visualization such as
 ```
 PdfReadWarning: Multiple definitions in dictionary at byte 0x3ba for key /Type [generic.py:588]
 PdfReadWarning: Multiple definitions in dictionary at byte 0x428 for key /Type [generic.py:588]

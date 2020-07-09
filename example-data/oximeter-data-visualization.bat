@@ -11,4 +11,4 @@ if "%~1"=="-FIXED_CTRL_C" (
 )
 
 echo on
-python oximeter-data-analysis.py "test trace" oximeter-20200705-145239-83376.csv
+python oximeter-data-visualization.py "test trace" oximeter-20200705-145239-83376.csv

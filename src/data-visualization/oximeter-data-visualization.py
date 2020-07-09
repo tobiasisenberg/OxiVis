@@ -33,8 +33,8 @@ import os
 
 if (len(sys.argv) < 2):
     print("Too few arguments. Please call script with a name and one or more data files. Examples:")
-    print(os.path.basename(__file__) + " \"Test test\" oximeter-20200706-002654-29871.csv")
-    print(os.path.basename(__file__) + " \"Test test\" oximeter-20200706-002654-29871.csv oximeter-20200706-003426-481146.csv")
+    print(os.path.basename(__file__) + " \"Some description\" oximeter-20200706-002654-29871.csv")
+    print(os.path.basename(__file__) + " \"Some description\" oximeter-20200706-002654-29871.csv oximeter-20200706-003426-481146.csv")
     sys.exit()
 
 filenameExtension = sys.argv[1]
