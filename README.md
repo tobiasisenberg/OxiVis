@@ -176,9 +176,9 @@ The CSV data capture files store the PPG, BPM, and SpO2 values and a millisecond
 
 ## Limitations
 
-The data reported by the oximeter via bluethooth low energy (i.e., the PPG, BPM, and SpO2 values) comes in form of integer values (one byte each). This is more or less unproblematic for the PPG values since they use much of the value range of the byte (specifically, they go from 0 to 100). For the BPM values and, even more, for the SpO2 values, however, the integer precision leads to clearly visible discrete steps in the visualization:
+The data reported by the oximeter via bluethooth low energy (i.e., the PPG, BPM, and SpO2 values) comes in form of integer values (only one byte each). This is more or less unproblematic for the PPG values since they use much of the value range of the byte (specifically, they go from 0 to 100) and change smoothly and continuously. For the BPM values and, even more, for the SpO2 values, however, the integer precision leads to clearly visible discrete steps in the visualization:
 ![Integer data](images/integer-data.png)
-The problem is worst for the SpO2 values because they usually only use a fairly small range of a few integer values. The BPM values vary more but still not as much as the PPG values. The first group of graphs in the visualization that use averaging thus are limited, in particular for the SpO2 values the discrete steps are still clearly visible. But there is nothing we can do about it due to the rounding (I assume) of these values that happens on the oximeter before they are being transmitted via BLE.
+The problem is worst for the SpO2 values because they usually only use a fairly small range of only a few integer values. The BPM values vary more but still not as much as the PPG values. The first group of graphs in the visualization that use averaging thus are limited, in particular for the SpO2 values the discrete steps are still clearly visible. But there is nothing we can do about it due to the rounding (I assume) of these values that happens already on the oximeter, before they are being transmitted via BLE. Unfortunately, the oximeter does not provide access to the raw values.
 
 ## Several data captures in one session
 
@@ -188,7 +188,7 @@ Currently the ESP32 sketch uses four buffers in total, each containing 15 second
 
 ## Battery use for the oximeter
 
-judging from my experiments, the oximeter works fine with regular AAA 1.2V NiMH rechargeable batteries, they seem to last for a night's worth of data capture (8 hours, and probably a few hours more). Therefore, it does not seem to be necessary to use Alkaline batteries.
+Judging from my experiments, the oximeter works fine with regular AAA 1.2V NiMH rechargeable batteries, they seem to last for a night's worth of data capture (8 hours, and probably a few hours more). When they are fully charged, I saw 3 out of 4 bars on the battery indicator, and after 8 hours often there was still one bar left. Therefore, it does not seem to be necessary to use Alkaline batteries.
 
 ## License
 
