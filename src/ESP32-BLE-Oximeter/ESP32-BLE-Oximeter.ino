@@ -21,7 +21,9 @@
 #include <time.h>
 
 // server and MQTT credentials
-//#include "credentials.h"
+#if __has_include("credentials.h")
+#include "credentials.h"
+#endif
 #ifndef WIFI_PASSWORD
 #define WIFI_PASSWORD "enter_password"
 #endif
