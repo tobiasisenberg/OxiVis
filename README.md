@@ -46,7 +46,14 @@ static BLEUUID    charOximeterUUID("49535343-1e4d-4bd9-ba61-23c647249616");
 static BLEAddress berryMed("00:a0:50:db:83:94");
 ```
 
-2. Also in the `ESP32-BLE-Oximeter.ino` file, customize the server and MQTT credentials or, alternatively, create a respective `credentials.h` file in the same directory as the main sketch with the defines of your data
+2. Create a `credentials.h` text file in the same directory as the main sketch with the defines of your Wifi and server access data:
+```
+#define WIFI_SSID     "Some Network"
+#define WIFI_PASSWORD "enter_password"
+#define MQTT_HOST     "192.168.1.1"
+#define MQTT_PORT     "1883"
+```
+or, alternatively, customize the server and MQTT credentials in the `ESP32-BLE-Oximeter.ino` file:
 ```
 // server and MQTT credentials
 #if __has_include("credentials.h")
