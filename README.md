@@ -22,8 +22,15 @@ Several elements need to be in place for the project to work:
 ![ESP32 development board](images/esp32devboard.jpg)
 - an installed [Arduino IDE](https://www.arduino.cc/en/main/software) with the ESP32 Add-on to compile the ESP32 sketch (should work on all OSes)
 - a Linux-based server to manage the data recording, for example a Raspberry Pi running [Raspberry Pi OS/Raspbian](https://www.raspberrypi.org/downloads/raspberry-pi-os/)
-- an MQTT server such as [Mosquitto](https://mosquitto.org/) installed on the server (could also be on a different server accessible from the local network); for instance, follow [this tutorial](https://appcodelabs.com/introduction-to-iot-build-an-mqtt-server-using-raspberry-pi)
-- a recent Python 3.x installed on the Linux server, along with `pip3` to install further prerequisites
+- an MQTT server such as [Mosquitto](https://mosquitto.org/) installed on the server (could also be on a different server accessible from the local network); for instance, from [this tutorial](https://appcodelabs.com/introduction-to-iot-build-an-mqtt-server-using-raspberry-pi), on a Raspberry Pi do:
+```
+sudo apt install mosquitto
+sudo systemctl enable mosquitto
+```
+- a recent Python 3.x installed on the Linux server, along with `pip3` to install further prerequisites; on a Raspberry Pi:
+```
+sudo apt install python3 python3-pip
+```
 - if the data visualization is not run on the Linux server, also a Python 3.x along with `pip3` installed on the machine to be used for the data visualization (e.g., [for Windows](https://www.python.org/downloads/windows/))
 - technically the data recording also could happen on a Windows server, but then the installation process below needs to be adjusted accordingly
 
@@ -71,9 +78,9 @@ sudo pip3 install paho-mqtt
 ```
 
 6. Also on the Linux server, install the `oximeter-data-recording.py` data recorder:
-- download or copy the file to a temporary location somewhere, such as to your home directory `~/`
-- move the file to `/usr/local/bin/` and make it executable
+- download or copy the file to a temporary location somewhere, such as to your home directory `~/`, and move the file to `/usr/local/bin/` and make it executable
 ```
+wget https://github.com/tobiasisenberg/OxiVis/raw/master/src/data-recording/oximeter-data-recording.py
 cd /usr/local/bin/
 sudo mv ~/oximeter-data-recording.py .
 sudo chmod 755 /usr/local/bin/oximeter-data-recording.py
