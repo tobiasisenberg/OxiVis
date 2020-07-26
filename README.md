@@ -71,9 +71,9 @@ sudo pip3 install paho-mqtt
 ```
 
 6. Also on the Linux server, install the `oximeter-data-recording.py` data recorder:
-- download or copy the file to a temporary location somewhere, such as to your home directory `~/`
-- move the file to `/usr/local/bin/` and make it executable
+- download or copy the file to a temporary location somewhere, such as to your home directory `~/`, and move the file to `/usr/local/bin/` and make it executable
 ```
+wget https://github.com/tobiasisenberg/OxiVis/raw/master/src/data-recording/oximeter-data-recording.py
 cd /usr/local/bin/
 sudo mv ~/oximeter-data-recording.py .
 sudo chmod 755 /usr/local/bin/oximeter-data-recording.py
