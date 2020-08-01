@@ -269,11 +269,12 @@ bool connectToServer() {
 
   // Connect to the remove BLE Server.
   boolean connectionSuccessful = pClient->connect(myDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
-  DEBUG_PRINTLN(" - Connected to server");
+//  boolean connectionSuccessful = pClient->connect(myDevice->getAddress()); // this would work, too, but does not seem to be better than the above
   if ((!connectionStarted) || (!connectionSuccessful)) {
     DEBUG_PRINTLN(" - Got a disconnect before we could complete the connection or connection was not successful");
     return false;
   }
+  DEBUG_PRINTLN(" - Connected to server");
 
   // Obtain a reference to the service we are after in the remote BLE server.
   BLERemoteService* pRemoteService = pClient->getService(serviceUUID);
